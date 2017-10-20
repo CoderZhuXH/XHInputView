@@ -13,7 +13,7 @@
 #define XHInputView_LRSpace 10
 #define XHInputView_TBSpace 8
 #define XHInputView_SendButtonSize  CGSizeMake(58, 29)
-#define XHInputView_CountLabHeight 15
+#define XHInputView_CountLabHeight 20
 #define XHInputView_BgViewColor [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3]
 
 static CGFloat keyboardAnimationDuration = 0.5;
@@ -21,6 +21,7 @@ static CGFloat keyboardAnimationDuration = 0.5;
 @interface XHInputView()<UITextViewDelegate>
 
 @property (nonatomic, strong) UITextView *textView;
+@property (nonatomic, strong) UIView * textBgView;
 @property (nonatomic, strong) UILabel *countLab;
 @property (nonatomic, strong) UILabel *placeholderLab;
 @property (nonatomic, strong) UIButton *sendButton;
@@ -61,18 +62,22 @@ static CGFloat keyboardAnimationDuration = 0.5;
     [_sendButton addTarget:self action:@selector(sendButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_sendButton];
 
-    _textView = [[UITextView alloc] initWithFrame:CGRectMake(XHInputView_LRSpace, XHInputView_TBSpace, XHInputView_ScreenW-2*XHInputView_LRSpace, CGRectGetMinY(_sendButton.frame)-2*XHInputView_TBSpace-XHInputView_CountLabHeight)];
-    _textView.backgroundColor = [UIColor yellowColor];
+    _textBgView = [[UIView alloc] initWithFrame:CGRectMake(XHInputView_LRSpace, XHInputView_TBSpace, XHInputView_ScreenW-2*XHInputView_LRSpace, CGRectGetMinY(_sendButton.frame)-2*XHInputView_TBSpace)];
+    _textBgView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    [self addSubview:_textBgView];
+    
+    _textView = [[UITextView alloc] initWithFrame:CGRectMake(0, 0, _textBgView.bounds.size.width, _textBgView.bounds.size.height-XHInputView_CountLabHeight)];
+    _textView.backgroundColor = [UIColor clearColor];
     _textView.font = [UIFont systemFontOfSize:15];
     _textView.delegate = self;
-    [self addSubview:_textView];
+    [_textBgView addSubview:_textView];
     
-    _countLab = [[UILabel alloc] initWithFrame:CGRectMake(_textView.frame.origin.x, CGRectGetMaxY(_textView.frame), _textView.frame.size.width, XHInputView_CountLabHeight)];
+    _countLab = [[UILabel alloc] initWithFrame:CGRectMake(0,_textView.bounds.size.height, _textBgView.bounds.size.width-5, XHInputView_CountLabHeight)];
     _countLab.font = [UIFont systemFontOfSize:14];
     _countLab.textColor =  [UIColor lightGrayColor];
     _countLab.textAlignment = NSTextAlignmentRight;
     _countLab.backgroundColor = _textView.backgroundColor;
-    [self addSubview:_countLab];
+    [_textBgView addSubview:_countLab];
     
     //键盘监听
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillAppear:) name:UIKeyboardWillShowNotification object:nil];
@@ -140,12 +145,11 @@ static CGFloat keyboardAnimationDuration = 0.5;
 #pragma mark - set
 -(void)setMaxCount:(NSInteger)maxCount{
     _maxCount = maxCount;
-    _countLab.text = [NSString stringWithFormat:@"%ld ",maxCount];
+    _countLab.text = [NSString stringWithFormat:@"%ld",maxCount];
 }
 -(void)setTextViewBackgroundColor:(UIColor *)textViewBackgroundColor{
     _textViewBackgroundColor = textViewBackgroundColor;
-    _textView.backgroundColor = textViewBackgroundColor;
-    _countLab.backgroundColor = textViewBackgroundColor;
+    _textBgView.backgroundColor = textViewBackgroundColor;
 }
 -(void)setFont:(UIFont *)font{
     _font = font;
