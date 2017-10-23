@@ -14,7 +14,7 @@
 ## 效果
 
 
-![image]() ![image]()
+![image](https://github.com/CoderZhuXH/XHInputView/blob/master/ScreenShot/样式一.png) ![image](https://github.com/CoderZhuXH/XHInputView/blob/master/ScreenShot/样式二.png)
 
 
 ## 使用方法
