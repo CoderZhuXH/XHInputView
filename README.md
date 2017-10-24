@@ -1,5 +1,5 @@
 
-### 轻量级评论输入框,支持多种样式,支持占位符设置等等!
+## 轻量级评论输入框,支持多种样式,支持占位符设置等等!
 
 [![AppVeyor](https://img.shields.io/appveyor/ci/gruntjs/grunt.svg?maxAge=2592000)](https://github.com/CoderZhuXH/XHInputView)
 [![Version Status](https://img.shields.io/cocoapods/v/XHInputView.svg?style=flat)](http://cocoadocs.org/docsets/XHInputView)
@@ -19,7 +19,7 @@
 
 ## 使用方法
 
-####    初始化
+###   初始化
 
 ```objc
 
@@ -42,7 +42,7 @@
 
 ```
 
-####    显示输入框
+###    显示输入框
 
 ```objc
 
@@ -51,7 +51,7 @@
 
 ```
 
-####    代理方法<XHInputViewDelagete>
+###   代理方法<XHInputViewDelagete>
 
 ```objc
 
@@ -86,7 +86,7 @@
 
 ```
 
-####    更多属性设置
+###    更多属性设置
 
 ```objc
 
