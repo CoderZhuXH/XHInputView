@@ -3,8 +3,8 @@
 //  XHInputViewExample
 //
 //  Created by zhuxiaohui on 2017/10/20.
-//  Copyright © 2017年 FORWARD. All rights reserved.
-//
+//  Copyright © 2017年 it7090.com. All rights reserved.
+//  代码地址:https://github.com/CoderZhuXH/XHInputView
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -14,7 +14,29 @@ typedef NS_ENUM(NSInteger,InputViewStyle) {
     InputViewStyleLarge,
 };
 
+@class XHInputView;
+@protocol XHInputViewDelagete <NSObject>
+@optional
+
+/**
+ XHInputView 将要显示
+ 
+ @param inputView inputView
+ */
+-(void)xhInputViewWillShow:(XHInputView *)inputView;
+
+/**
+ XHInputView 将要影藏
+
+ @param inputView inputView
+ */
+-(void)xhInputViewWillHide:(XHInputView *)inputView;
+
+@end
+
 @interface XHInputView : UIView
+
+@property (nonatomic, assign) id<XHInputViewDelagete> delegate;
 
 /** 最大输入字数 */
 @property (nonatomic, assign) NSInteger maxCount;

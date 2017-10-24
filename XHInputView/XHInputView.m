@@ -3,8 +3,8 @@
 //  XHInputViewExample
 //
 //  Created by zhuxiaohui on 2017/10/20.
-//  Copyright © 2017年 FORWARD. All rights reserved.
-//
+//  Copyright © 2017年 it7090.com. All rights reserved.
+//  代码地址:https://github.com/CoderZhuXH/XHInputView
 
 #import "XHInputView.h"
 
@@ -39,13 +39,18 @@ static CGFloat keyboardAnimationDuration = 0.5;
 @implementation XHInputView
 
 -(void)show{
+    
+    if([self.delegate respondsToSelector:@selector(xhInputViewWillShow:)]){
+        [self.delegate xhInputViewWillShow:self];
+    }
+    
     _textView.text = nil;
     _placeholderLab.hidden = NO;
     [_textView becomeFirstResponder];
     
     switch (_style) {
         case InputViewStyleLarge:{
-            if(_maxCount>0) _countLab.text = [NSString stringWithFormat:@"0/%ld",_maxCount];
+            if(_maxCount>0) _countLab.text = [NSString stringWithFormat:@"0/%ld",(long)_maxCount];
         }
             break;
         case InputViewStyleDefault:{
@@ -57,6 +62,11 @@ static CGFloat keyboardAnimationDuration = 0.5;
     }
 }
 -(void)hide{
+    
+    if([self.delegate respondsToSelector:@selector(xhInputViewWillHide:)]){
+        [self.delegate xhInputViewWillHide:self];
+    }
+    
     [_textView resignFirstResponder];
 }
 
@@ -174,7 +184,7 @@ static CGFloat keyboardAnimationDuration = 0.5;
             textView.text = [textView.text substringToIndex:_maxCount];
         }
         if(_style == InputViewStyleLarge){
-            _countLab.text = [NSString stringWithFormat:@"%ld/%ld",textView.text.length,_maxCount];
+            _countLab.text = [NSString stringWithFormat:@"%ld/%ld",(unsigned long)textView.text.length,_maxCount];
         }
     }
     if(_style == InputViewStyleDefault){
@@ -268,7 +278,7 @@ static CGFloat keyboardAnimationDuration = 0.5;
     
     switch (_style) {
         case InputViewStyleLarge:{
-            _countLab.text = [NSString stringWithFormat:@"0/%ld",maxCount];
+            _countLab.text = [NSString stringWithFormat:@"0/%ld",(long)maxCount];
         }
             break;
             

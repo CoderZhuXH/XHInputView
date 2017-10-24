@@ -51,6 +51,41 @@
 
 ```
 
+* 代理方法<XHInputViewDelagete>
+
+```objc
+
+/**
+ XHInputView 将要显示
+ 
+ @param inputView inputView
+ */
+-(void)xhInputViewWillShow:(XHInputView *)inputView
+{
+    /*
+    //如果你工程中有配置IQKeyboardManager,并对XHInputView造成影响,请在XHInputView将要显示时将其关闭
+    [IQKeyboardManager sharedManager].enableAutoToolbar = NO;
+    [IQKeyboardManager sharedManager].enable = NO;
+    */
+
+}
+
+/**
+ XHInputView 将要影藏
+
+ @param inputView inputView
+ */
+-(void)xhInputViewWillHide:(XHInputView *)inputView{
+    
+    /*
+    //如果你工程中有配置IQKeyboardManager,并对XHInputView造成影响,请在XHInputView将要影藏时将其打开
+    [IQKeyboardManager sharedManager].enableAutoToolbar = YES;
+    [IQKeyboardManager sharedManager].enable = YES;
+    */
+}
+
+```
+
 *	更多属性设置
 
 ```objc
