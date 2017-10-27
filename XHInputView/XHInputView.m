@@ -184,7 +184,7 @@ static CGFloat keyboardAnimationDuration = 0.5;
             textView.text = [textView.text substringToIndex:_maxCount];
         }
         if(_style == InputViewStyleLarge){
-            _countLab.text = [NSString stringWithFormat:@"%ld/%ld",(unsigned long)textView.text.length,_maxCount];
+            _countLab.text = [NSString stringWithFormat:@"%ld/%ld",(long)textView.text.length,(long)_maxCount];
         }
     }
     if(_style == InputViewStyleDefault){
