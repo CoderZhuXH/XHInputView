@@ -19,69 +19,63 @@
 
 ## 使用方法
 
-###   初始化
+###   显示输入框
 
 ```objc
 
-     __weak typeof(self) weakSelf = self;
-    
-    /** 初始化并设置样式:支持InputViewStyleLarge、InputViewStyleDefault两种样式 */
-    self.inputView = [[XHInputView alloc] initWithStyle:InputViewStyleLarge];
-    /** 设置最大输入字数 */
-    self.inputView.maxCount = 50;
-    /** 设置占位符 */
-    self.inputView.placeholder = @"请输入...";
-    /** 添加至视图 */
-    [self.view addSubview:self.inputView];
-    /** 发送按钮点击事件 */
-    self.inputView.sendBlcok = ^(NSString *text) {
-        /** 隐藏输入框 */
-        [weakSelf.inputView hide];
-        NSLog(@"输入的文字:%@",text);
-    };
+
+    //支持InputViewStyleDefault 与 InputViewStyleLarge 两种样式
+    [XHInputView showWithStyle:InputViewStyleDefault configurationBlock:^(XHInputView *inputView) {
+        /** 请在此block中设置inputView属性 */
+        
+        /** 代理 */
+        inputView.delegate = self;
+        
+        /** 占位符文字 */
+        inputView.placeholder = @"请输入评论文字...";
+        /** 设置最大输入字数 */
+        inputView.maxCount = 50;
+        /** 输入框颜色 */
+        inputView.textViewBackgroundColor = [UIColor groupTableViewBackgroundColor];
+        
+        /** 更多属性设置,详见XHInputView.h文件 */
+        
+    } sendBlock:^BOOL(NSString *text) {
+
+        if(text.length){
+            NSLog(@"输入为信息为:%@",text);
+            return YES;//return YES,收起键盘
+        }else{
+            NSLog(@"显示提示框-你输入的内容为空");
+            return NO;//return NO,不收键盘
+        }
+    }];
 
 ```
 
-###    显示输入框
-
-```objc
-
-    /** 显示输入框 */
-   [self.inputView show];
-
-```
 
 ###   代理方法<XHInputViewDelagete>
 
 ```objc
 
-/**
- XHInputView 将要显示
- 
- @param inputView inputView
- */
+/** XHInputView 将要显示 */
 -(void)xhInputViewWillShow:(XHInputView *)inputView
 {
-    /*
-    //如果你工程中有配置IQKeyboardManager,并对XHInputView造成影响,请在XHInputView将要显示时将其关闭
-    [IQKeyboardManager sharedManager].enableAutoToolbar = NO;
-    [IQKeyboardManager sharedManager].enable = NO;
-    */
+    
+     /** 如果你工程中有配置IQKeyboardManager,并对XHInputView造成影响,请在XHInputView将要显示时将其关闭 */
+    
+     //[IQKeyboardManager sharedManager].enableAutoToolbar = NO;
+     //[IQKeyboardManager sharedManager].enable = NO;
 
 }
 
-/**
- XHInputView 将要影藏
-
- @param inputView inputView
- */
+/** XHInputView 将要影藏 */
 -(void)xhInputViewWillHide:(XHInputView *)inputView{
     
-    /*
-    //如果你工程中有配置IQKeyboardManager,并对XHInputView造成影响,请在XHInputView将要影藏时将其打开
-    [IQKeyboardManager sharedManager].enableAutoToolbar = YES;
-    [IQKeyboardManager sharedManager].enable = YES;
-    */
+     /** 如果你工程中有配置IQKeyboardManager,并对XHInputView造成影响,请在XHInputView将要影藏时将其打开 */
+    
+     //[IQKeyboardManager sharedManager].enableAutoToolbar = YES;
+     //[IQKeyboardManager sharedManager].enable = YES;
 }
 
 ```

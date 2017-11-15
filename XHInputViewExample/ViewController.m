@@ -11,8 +11,6 @@
 
 @interface ViewController ()<XHInputViewDelagete>
 
-@property (nonatomic, strong) XHInputView *inputViewStyleDefault;
-@property (nonatomic, strong) XHInputView *inputViewStyleLarge;
 @property (weak, nonatomic) IBOutlet UILabel *textLab;
 
 @end
@@ -22,99 +20,68 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    __weak typeof(self) weakSelf = self;
-    
-    //样式一
-    self.inputViewStyleDefault = [self inputViewWithStyle:InputViewStyleDefault];
-    self.inputViewStyleDefault.delegate = self;
-    [self.view addSubview:self.inputViewStyleDefault];
-    /** 发送按钮点击事件 */
-    self.inputViewStyleDefault.sendBlcok = ^(NSString *text) {
-        [weakSelf.inputViewStyleDefault hide];//隐藏输入框
-        weakSelf.textLab.text = text;
-    };
-    
-    //样式二
-    self.inputViewStyleLarge = [self inputViewWithStyle:InputViewStyleLarge];
-    self.inputViewStyleLarge.delegate = self;
-    [self.view addSubview:self.inputViewStyleLarge];
-    /** 发送按钮点击事件 */
-    self.inputViewStyleLarge.sendBlcok = ^(NSString *text) {
-        [weakSelf.inputViewStyleLarge hide];//隐藏输入框
-        weakSelf.textLab.text = text;
-    };
-    
 }
 
 #pragma mark - Action
 - (IBAction)showStyleDefault:(UIButton *)sender {
     
-    [self.inputViewStyleDefault show];//显示样式一
+    [self showXHInputViewWithStyle:InputViewStyleDefault];//显示样式一
 }
 
 - (IBAction)showStyleLarge:(UIButton *)sender {
     
-    [self.inputViewStyleLarge show];//显示样式二
+     [self showXHInputViewWithStyle:InputViewStyleLarge];//显示样式二
+    
+}
+
+-(void)showXHInputViewWithStyle:(InputViewStyle)style{
+    
+    [XHInputView showWithStyle:style configurationBlock:^(XHInputView *inputView) {
+        /** 请在此block中设置inputView属性 */
+        
+        /** 代理 */
+        inputView.delegate = self;
+        
+        /** 占位符文字 */
+        inputView.placeholder = @"请输入评论文字...";
+        /** 设置最大输入字数 */
+        inputView.maxCount = 50;
+        /** 输入框颜色 */
+        inputView.textViewBackgroundColor = [UIColor groupTableViewBackgroundColor];
+        
+        /** 更多属性设置,详见XHInputView.h文件 */
+        
+    } sendBlock:^BOOL(NSString *text) {
+        if(text.length){
+            NSLog(@"输入的信息为:%@",text);
+            _textLab.text = text;
+            return YES;//return YES,收起键盘
+        }else{
+            NSLog(@"显示提示框-请输入要评论的的内容");
+            return NO;//return NO,不收键盘
+        }
+    }];
+    
 }
 
 #pragma mark - XHInputViewDelagete
-/**
- XHInputView 将要显示
- */
--(void)xhInputViewWillShow:(XHInputView *)inputView
-{
-    /*
-     //如果你工程中有配置IQKeyboardManager,并对XHInputView造成影响,请在XHInputView将要显示时将其关闭
-     [IQKeyboardManager sharedManager].enableAutoToolbar = NO;
-     [IQKeyboardManager sharedManager].enable = NO;
-     */
+/** XHInputView 将要显示 */
+-(void)xhInputViewWillShow:(XHInputView *)inputView{
     
+     /** 如果你工程中有配置IQKeyboardManager,并对XHInputView造成影响,请在XHInputView将要显示时将其关闭 */
+    
+     //[IQKeyboardManager sharedManager].enableAutoToolbar = NO;
+     //[IQKeyboardManager sharedManager].enable = NO;
+
 }
 
-/**
- XHInputView 将要影藏
- */
+/** XHInputView 将要影藏 */
 -(void)xhInputViewWillHide:(XHInputView *)inputView{
     
-    /*
-     //如果你工程中有配置IQKeyboardManager,并对XHInputView造成影响,请在XHInputView将要影藏时将其打开
-     [IQKeyboardManager sharedManager].enableAutoToolbar = YES;
-     [IQKeyboardManager sharedManager].enable = YES;
-     */
-}
-
--(XHInputView *)inputViewWithStyle:(InputViewStyle)style{
+     /** 如果你工程中有配置IQKeyboardManager,并对XHInputView造成影响,请在XHInputView将要影藏时将其打开 */
     
-    XHInputView *inputView = [[XHInputView alloc] initWithStyle:style];
-    //设置最大输入字数
-    inputView.maxCount = 50;
-    //输入框颜色
-    inputView.textViewBackgroundColor = [UIColor groupTableViewBackgroundColor];
-    //占位符
-    inputView.placeholder = @"请输入...";
-    return inputView;
-    
-    //XHInputView 支持一下属性设置,详见XHInputView.h文件
-    
-    //    /** 最大输入字数 */
-    //    @property (nonatomic, assign) NSInteger maxCount;
-    //    /** 字体 */
-    //    @property (nonatomic, strong) UIFont * font;
-    //    /** 占位符 */
-    //    @property (nonatomic, copy) NSString *placeholder;
-    //    /** 占位符颜色 */
-    //    @property (nonatomic, strong) UIColor *placeholderColor;
-    //    /** 输入框背景颜色 */
-    //    @property (nonatomic, strong) UIColor* textViewBackgroundColor;
-    //    /** 发送按钮背景色 */
-    //    @property (nonatomic, strong) UIColor *sendButtonBackgroundColor;
-    //    /** 发送按钮Title */
-    //    @property (nonatomic, copy) NSString *sendButtonTitle;
-    //    /** 发送按钮圆角大小 */
-    //    @property (nonatomic, assign) CGFloat sendButtonCornerRadius;
-    //    /** 发送按钮字体 */
-    //    @property (nonatomic, strong) UIFont * sendButtonFont;
-    
+     //[IQKeyboardManager sharedManager].enableAutoToolbar = YES;
+     //[IQKeyboardManager sharedManager].enable = YES;
 }
 
 - (void)didReceiveMemoryWarning {

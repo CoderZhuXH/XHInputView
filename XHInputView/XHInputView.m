@@ -34,16 +34,33 @@ static CGFloat keyboardAnimationDuration = 0.5;
 @property (nonatomic, assign) CGRect showFrameDefault;
 @property (nonatomic, assign) CGRect sendButtonFrameDefault;
 @property (nonatomic, assign) CGRect textViewFrameDefault;
+
+/** 发送按钮点击回调 */
+@property (nonatomic, copy) BOOL(^sendBlcok)(NSString *text);
+@property (nonatomic, assign) BOOL hideKeyBoard;
+
 @end
 
 @implementation XHInputView
 
+-(void)dealloc{
+    NSLog(@"XHInputView 销毁");
+}
++(void)showWithStyle:(InputViewStyle)style configurationBlock:(void(^)(XHInputView *inputView))configurationBlock sendBlock:(BOOL(^)(NSString *text))sendBlock{
+    XHInputView *inputView = [[XHInputView alloc] initWithStyle:style];
+    UIWindow *window = [UIApplication sharedApplication].delegate.window;
+    [window addSubview:inputView];
+    if(configurationBlock) configurationBlock(inputView);
+    inputView.sendBlcok = [sendBlock copy];
+    [inputView show];
+}
+
+#pragma mark - private
 -(void)show{
     
     if([self.delegate respondsToSelector:@selector(xhInputViewWillShow:)]){
         [self.delegate xhInputViewWillShow:self];
     }
-    
     _textView.text = nil;
     _placeholderLab.hidden = NO;
     [_textView becomeFirstResponder];
@@ -61,8 +78,8 @@ static CGFloat keyboardAnimationDuration = 0.5;
             break;
     }
 }
+
 -(void)hide{
-    
     if([self.delegate respondsToSelector:@selector(xhInputViewWillHide:)]){
         [self.delegate xhInputViewWillHide:self];
     }
@@ -74,7 +91,6 @@ static CGFloat keyboardAnimationDuration = 0.5;
 {
     self = [super init];
     if (self) {
-        
         _style = style;
         self.backgroundColor = [UIColor whiteColor];
         switch (style) {
@@ -84,7 +100,13 @@ static CGFloat keyboardAnimationDuration = 0.5;
             }
                 break;
             case InputViewStyleLarge:{
-                self.frame = CGRectMake(0, XHInputView_ScreenH, XHInputView_ScreenW, 170);
+                CGFloat height = 170;
+                if(XHInputView_ScreenH<=320){
+                    height = 90;
+                }else if(XHInputView_ScreenH<=375){
+                    height = 140;
+                }
+                self.frame = CGRectMake(0, XHInputView_ScreenH, XHInputView_ScreenW, height);
                 [self setupStyleLargeUI];
             }
                 break;
@@ -232,7 +254,12 @@ static CGFloat keyboardAnimationDuration = 0.5;
 }
 -(void)sendButtonClick:(UIButton *)button{
     
-    if(self.sendBlcok) self.sendBlcok(self.textView.text);
+    if(self.sendBlcok){
+        BOOL hideKeyBoard = self.sendBlcok(self.textView.text);
+        if(hideKeyBoard){
+            [self hide];
+        }
+    }
 }
 #pragma mark - 监听键盘
 - (void)keyboardWillAppear:(NSNotification *)noti{
@@ -266,8 +293,8 @@ static CGFloat keyboardAnimationDuration = 0.5;
             self.frame = frame;
             self.bgView.backgroundColor = [UIColor clearColor];
         } completion:^(BOOL finished) {
-            [_bgView removeFromSuperview];
-            _bgView = nil;
+            [self.bgView removeFromSuperview];
+            [self removeFromSuperview];
         }];
     }
 }

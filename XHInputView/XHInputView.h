@@ -75,15 +75,15 @@ typedef NS_ENUM(NSInteger,InputViewStyle) {
 @property (nonatomic, assign) CGFloat sendButtonCornerRadius;
 /** 发送按钮字体 */
 @property (nonatomic, strong) UIFont * sendButtonFont;
-/** 发送按钮点击回调 */
-@property (nonatomic, copy) void(^sendBlcok)(NSString *text);
 
-/** 初始化方法 */
-- (instancetype)initWithStyle:(InputViewStyle)style;
 
-/** 显示输入框 */
--(void)show;
-/** 隐藏输入框 */
--(void)hide;
+/**
+ 显示输入框
+
+ @param style 类型
+ @param configurationBlock 请在此block中设置XHInputView属性
+ @param sendBlock 发送按钮点击回调
+ */
++(void)showWithStyle:(InputViewStyle)style configurationBlock:(void(^)(XHInputView *inputView))configurationBlock sendBlock:(BOOL(^)(NSString *text))sendBlock;
 
 @end
