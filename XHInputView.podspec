@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "XHInputView"
-  s.version      = "1.1.0"
+  s.version      = "1.1.1"
   s.summary      = "轻量级评论输入框,支持多种样式,支持设置占位符等等..."
   s.homepage     = "https://github.com/CoderZhuXH/XHInputView"
   s.license      = { :type => "MIT", :file => "LICENSE" }
